@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Objetos UDB</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- CSS del proyecto -->
+
+    <link
+        rel="stylesheet"
+        href="css/estilos.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-udb">
+
+    <div class="container">
+
+
+        <a
+            class="navbar-brand fw-bold"
+            href="dashboard.html">
+
+            🔎 Objetos UDB
+
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menu">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div
+            class="collapse navbar-collapse"
+            id="menu">
+
+
+            <ul class="navbar-nav ms-auto">
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link active"
+                        href="dashboard.html">
+
+                        Inicio
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="objetos.html">
+
+                        Buscar objetos
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="publicar.html">
+
+                        Publicar objeto
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="solicitudes.html">
+
+                        Solicitudes
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <button
+                        class="btn btn-light ms-lg-2"
+                        onclick="cerrarSesion()">
+
+                        Cerrar sesión
+
+                    </button>
+
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ==========================================
+     CONTENIDO PRINCIPAL
+========================================== -->
+
+<main class="container py-5">
+
+
+    <!-- BIENVENIDA -->
+
+    <div class="mb-5">
+
+        <h1>
+
+            ¡Bienvenido/a,
+            <span id="nombreUsuario">
+                Usuario
+            </span>! 👋
+
+        </h1>
+
+
+        <p class="text-muted">
+
+            Este es tu panel principal del Sistema de
+            Objetos Perdidos y Encontrados de la UDB.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         TARJETAS DE INFORMACIÓN
+    ========================================== -->
+
+    <div class="row g-4 mb-5">
+
+
+        <!-- OBJETOS PERDIDOS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card dashboard-card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="dashboard-icon">
+                        🔍
+                    </div>
+
+                    <h5>
+                        Objetos perdidos
+                    </h5>
+
+                    <h2 id="totalPerdidos">
+                        0
+                    </h2>
+
+                    <p class="text-muted">
+                        Reportados
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- OBJETOS ENCONTRADOS -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card dashboard-card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="dashboard-icon">
+                        📦
+                    </div>
+
+                    <h5>
+                        Objetos encontrados
+                    </h5>
+
+                    <h2 id="totalEncontrados">
+                        0
+                    </h2>
+
+                    <p class="text-muted">
+                        Registrados
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MIS PUBLICACIONES -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card dashboard-card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="dashboard-icon">
+                        📋
+                    </div>
+
+                    <h5>
+                        Mis publicaciones
+                    </h5>
+
+                    <h2 id="misPublicaciones">
+                        0
+                    </h2>
+
+                    <p class="text-muted">
+                        Registradas por mí
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SOLICITUDES -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card dashboard-card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="dashboard-icon">
+                        🤝
+                    </div>
+
+                    <h5>
+                        Solicitudes
+                    </h5>
+
+                    <h2 id="totalSolicitudes">
+                        0
+                    </h2>
+
+                    <p class="text-muted">
+                        Pendientes
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==========================================
+         ACCIONES RÁPIDAS
+    ========================================== -->
+
+    <section class="mb-5">
+
+        <h2 class="mb-4">
+            Acciones rápidas
+        </h2>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <div class="icono">
+                            📦
+                        </div>
+
+                        <h4>
+                            Publicar objeto
+                        </h4>
+
+                        <p class="text-muted">
+
+                            Registra un objeto perdido
+                            o encontrado.
+
+                        </p>
+
+
+                        <a
+                            href="publicar.html"
+                            class="btn btn-primary">
+
+                            Publicar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <div class="icono">
+                            🔎
+                        </div>
+
+                        <h4>
+                            Buscar objeto
+                        </h4>
+
+                        <p class="text-muted">
+
+                            Busca objetos reportados
+                            dentro de la universidad.
+
+                        </p>
+
+
+                        <a
+                            href="objetos.html"
+                            class="btn btn-primary">
+
+                            Buscar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <div class="icono">
+                            🤝
+                        </div>
+
+                        <h4>
+                            Mis solicitudes
+                        </h4>
+
+                        <p class="text-muted">
+
+                            Consulta las solicitudes
+                            de recuperación.
+
+                        </p>
+
+
+                        <a
+                            href="solicitudes.html"
+                            class="btn btn-primary">
+
+                            Ver solicitudes
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         OBJETOS RECIENTES
+    ========================================== -->
+
+    <section>
+
+        <h2 class="mb-4">
+            Objetos recientes
+        </h2>
+
+
+        <div
+            id="objetosRecientes"
+            class="row g-4">
+
+
+            <div class="col-12">
+
+                <div class="alert alert-info">
+
+                    Todavía no hay objetos registrados.
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer class="footer">
+
+    <div class="container text-center">
+
+        <p class="mb-0">
+
+            © 2026 Sistema de Objetos Perdidos
+            y Encontrados - UDB
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script src="js/auth.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
