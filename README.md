@@ -25,7 +25,9 @@ Tecnologías y frameworks
 HTML5 y CSS3
 Bootstrap
 JavaScript
-
+React
+MySQL
 Herramientas de desarrollo
 Visual Studio Code
+XAMPP
 Git / GitHub
