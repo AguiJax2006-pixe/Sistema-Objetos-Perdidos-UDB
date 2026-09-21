@@ -1,54 +1,55 @@
-
-// PUBLICAR OBJETOS
-
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const usuario = obtenerSesion();
 
-    // Si no hay sesión, regresar al login
     if (!usuario) {
-
         window.location.href = "login.html";
-
         return;
     }
 
+    const formulario = document.getElementById("formPublicar");
 
-    const formulario =
-        document.getElementById("formPublicar");
-
+    if (!formulario) {
+        console.error("No se encontró el formulario formPublicar.");
+        return;
+    }
 
     formulario.addEventListener("submit", function (event) {
 
         event.preventDefault();
 
+        const nombre = document
+            .getElementById("nombreObjeto")
+            .value
+            .trim();
 
-        const nombre =
-            document.getElementById("nombreObjeto").value.trim();
+        const categoria = document
+            .getElementById("categoria")
+            .value;
 
-        const categoria =
-            document.getElementById("categoria").value;
+        const descripcion = document
+            .getElementById("descripcion")
+            .value
+            .trim();
 
-        const descripcion =
-            document.getElementById("descripcion").value.trim();
+        const ubicacion = document
+            .getElementById("ubicacion")
+            .value
+            .trim();
 
-        const ubicacion =
-            document.getElementById("ubicacion").value.trim();
+        const fecha = document
+            .getElementById("fecha")
+            .value;
 
-        const fecha =
-            document.getElementById("fecha").value;
-
-        const estado =
-            document.getElementById("estado").value;
-
+        const estado = document
+            .getElementById("estado")
+            .value;
 
         const mensaje =
             document.getElementById("mensaje");
 
 
-        // Validaciones
-
+        // VALIDACIÓN
         if (
             !nombre ||
             !categoria ||
@@ -68,14 +69,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Obtener objetos existentes
+        // OBTENER OBJETOS EXISTENTES
+        let objetos = [];
 
-        let objetos =
-            JSON.parse(localStorage.getItem("objetos")) || [];
+        try {
+
+            const datos =
+                localStorage.getItem("objetos");
+
+            if (datos) {
+                objetos = JSON.parse(datos);
+            }
+
+            if (!Array.isArray(objetos)) {
+                objetos = [];
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error al leer objetos:",
+                error
+            );
+
+            objetos = [];
+        }
 
 
-        // Crear objeto
-
+        // CREAR OBJETO
         const nuevoObjeto = {
 
             id: Date.now(),
@@ -95,7 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
             usuarioId: usuario.id,
 
             usuarioNombre:
-                usuario.nombre + " " + usuario.apellido,
+                usuario.nombre +
+                " " +
+                usuario.apellido,
 
             fechaRegistro:
                 new Date().toLocaleString()
@@ -103,18 +126,28 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
 
-        // Guardar
-
+        // AGREGAR OBJETO
         objetos.push(nuevoObjeto);
 
 
+        // GUARDAR
         localStorage.setItem(
             "objetos",
             JSON.stringify(objetos)
         );
 
 
-        // Mensaje
+        // COMPROBAR GUARDADO
+        console.log(
+            "Objeto guardado:",
+            nuevoObjeto
+        );
+
+        console.log(
+            "Todos los objetos:",
+            objetos
+        );
+
 
         mensaje.className =
             "alert alert-success";

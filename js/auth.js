@@ -1,19 +1,39 @@
+function leerUsuarios() {
+    try {
+        const datos = JSON.parse(
+            localStorage.getItem("usuarios")
+        );
 
+        return Array.isArray(datos)
+            ? datos
+            : [];
 
-// INICIALIZAR USUARIOS
+    } catch (error) {
+
+        console.error(
+            "No se pudieron leer los usuarios:",
+            error
+        );
+
+        return [];
+    }
+}
 
 
 function inicializarUsuarios() {
 
-    let usuarios =
-        JSON.parse(localStorage.getItem("usuarios")) || [];
+    const usuarios = leerUsuarios();
 
 
-    // Crear administrador de prueba
+    const existeAdmin =
+        usuarios.some(function (usuario) {
 
-    const existeAdmin = usuarios.some(
-        usuario => usuario.carnet === "ADMIN001"
-    );
+            return String(
+                usuario.carnet || ""
+            )
+            .toUpperCase() === "ADMIN001";
+
+        });
 
 
     if (!existeAdmin) {
@@ -45,13 +65,8 @@ function inicializarUsuarios() {
         );
 
     }
-
 }
 
-
-// ==========================================
-// REGISTRAR USUARIO
-// ==========================================
 
 function registrarUsuario(
     nombre,
@@ -62,20 +77,30 @@ function registrarUsuario(
     password
 ) {
 
-    let usuarios =
-        JSON.parse(localStorage.getItem("usuarios")) || [];
+    const usuarios =
+        leerUsuarios();
 
 
-    // Comprobar carnet existente
-
-   const existeCarnet = usuarios.some(
-    usuario =>
-        String(usuario.carnet || "").toLowerCase() ===
-        carnet.toLowerCase()
-    );
+    const carnetNormalizado =
+        carnet.trim().toLowerCase();
 
 
-    if (existeCarnet) {
+    const correoNormalizado =
+        correo.trim().toLowerCase();
+
+
+    if (
+        usuarios.some(function (usuario) {
+
+            return String(
+                usuario.carnet || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            carnetNormalizado;
+
+        })
+    ) {
 
         return {
 
@@ -85,20 +110,21 @@ function registrarUsuario(
                 "Este carnet estudiantil ya está registrado."
 
         };
-
     }
 
 
-    // Comprobar correo existente
+    if (
+        usuarios.some(function (usuario) {
 
-   const existeCorreo = usuarios.some(
-    usuario =>
-        String(usuario.correo || "").toLowerCase() ===
-        correo.toLowerCase()
-    );
+            return String(
+                usuario.correo || ""
+            )
+            .trim()
+            .toLowerCase() ===
+            correoNormalizado;
 
-
-    if (existeCorreo) {
+        })
+    ) {
 
         return {
 
@@ -108,34 +134,28 @@ function registrarUsuario(
                 "Este correo ya está registrado."
 
         };
-
     }
 
 
-    // Crear usuario
-
-    const nuevoUsuario = {
+    usuarios.push({
 
         id: Date.now(),
 
-        nombre: nombre,
+        nombre: nombre.trim(),
 
-        apellido: apellido,
+        apellido: apellido.trim(),
 
-        carnet: carnet,
+        carnet: carnet.trim(),
 
-        carrera: carrera,
+        carrera: carrera.trim(),
 
-        correo: correo.toLowerCase(),
+        correo: correoNormalizado,
 
         password: password,
 
         rol: "usuario"
 
-    };
-
-
-    usuarios.push(nuevoUsuario);
+    });
 
 
     localStorage.setItem(
@@ -152,12 +172,7 @@ function registrarUsuario(
             "Usuario registrado correctamente."
 
     };
-
 }
-
-
-
-// INICIAR SESIÓN
 
 
 function iniciarSesion(
@@ -167,30 +182,46 @@ function iniciarSesion(
 ) {
 
     const usuarios =
-        JSON.parse(localStorage.getItem("usuarios")) || [];
+        leerUsuarios();
 
 
-    const usuario = usuarios.find(
+    const carnetNormalizado =
+        carnet.trim().toLowerCase();
 
-        usuario =>
 
-            String(usuario.carnet || "")
+    const correoNormalizado =
+        correo.trim().toLowerCase();
+
+
+    const usuario =
+        usuarios.find(function (item) {
+
+            return (
+
+                String(
+                    item.carnet || ""
+                )
                 .trim()
                 .toLowerCase() ===
-            carnet.trim().toLowerCase()
+                carnetNormalizado
 
-            &&
+                &&
 
-            String(usuario.correo || "")
+                String(
+                    item.correo || ""
+                )
                 .trim()
                 .toLowerCase() ===
-            correo.trim().toLowerCase()
+                correoNormalizado
 
-            &&
+                &&
 
-            usuario.password === password
+                item.password ===
+                password
 
-    );
+            );
+
+        });
 
 
     if (!usuario) {
@@ -203,14 +234,9 @@ function iniciarSesion(
                 "El correo, carnet o contraseña son incorrectos."
 
         };
-
     }
 
 
-   
-    // GUARDAR SESIÓN
-    
-
     localStorage.setItem(
         "sesionActual",
         JSON.stringify(usuario)
@@ -224,45 +250,34 @@ function iniciarSesion(
         usuario: usuario
 
     };
-
 }
 
-
-    // Guardar sesión
-
-    localStorage.setItem(
-        "sesionActual",
-        JSON.stringify(usuario)
-    );
-
-
-    return {
-
-        correcto: true,
-
-        usuario: usuario
-
-    };
-
-
-
-
-// ==========================================
-// OBTENER SESIÓN
-// ==========================================
 
 function obtenerSesion() {
 
-    return JSON.parse(
-        localStorage.getItem("sesionActual")
-    );
+    try {
 
+        const sesion =
+            JSON.parse(
+                localStorage.getItem(
+                    "sesionActual"
+                )
+            );
+
+
+        return (
+            sesion &&
+            typeof sesion === "object"
+        )
+            ? sesion
+            : null;
+
+    } catch (error) {
+
+        return null;
+    }
 }
 
-
-// ==========================================
-// CERRAR SESIÓN
-// ==========================================
 
 function cerrarSesion() {
 
@@ -273,13 +288,8 @@ function cerrarSesion() {
 
     window.location.href =
         "login.html";
-
 }
 
-
-// ==========================================
-// PROTEGER PÁGINAS
-// ==========================================
 
 function protegerPagina() {
 
@@ -293,18 +303,12 @@ function protegerPagina() {
             "login.html";
 
         return null;
-
     }
 
 
     return usuario;
-
 }
 
-
-// ==========================================
-// PROTEGER ADMINISTRADOR
-// ==========================================
 
 function protegerAdmin() {
 
@@ -317,8 +321,7 @@ function protegerAdmin() {
         window.location.href =
             "login.html";
 
-        return;
-
+        return null;
     }
 
 
@@ -332,13 +335,13 @@ function protegerAdmin() {
         window.location.href =
             "dashboard.html";
 
+
+        return null;
     }
 
+
+    return usuario;
 }
 
-
-// ==========================================
-// INICIALIZAR
-// ==========================================
 
 inicializarUsuarios();
