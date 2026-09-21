@@ -25,11 +25,9 @@ Tecnologías y frameworks
 HTML5 y CSS3
 Bootstrap
 JavaScript
-React
 MySQL
 Herramientas de desarrollo
 Visual Studio Code
-XAMPP
 Git / GitHub
 API externa
 API de mapas y/o geolocalización para registrar, visualizar y analizar las ubicaciones relacionadas con los objetos perdidos y encontrados.
